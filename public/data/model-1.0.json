@@ -1,0 +1,16 @@
+{
+  "model_version": "1.0",
+  "metrics": {
+    "accuracy": "0.6590",
+    "logloss": "0.6135",
+    "precision": "0.60",
+    "recall": "0.58"
+  },
+  "images": [
+    "/images/1.0/cell_17_img_01.png",
+    "/images/1.0/cell_18_img_02.png",
+    "/images/1.0/cell_19_img_03.png",
+    "/images/1.0/cell_20_img_04.png"
+  ],
+  "notes": "Auto-generated from executed notebook"
+}
