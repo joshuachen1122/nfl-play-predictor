@@ -1,0 +1,16 @@
+export const site = {
+    name: "NFL Play Predictor",
+    description:
+      "A clean, static showcase for my rush vs. pass prediction model—methodology, results, and visuals.",
+    url: "https://your-domain.com",
+    nav: [
+      { href: "/", label: "Home" },
+      { href: "/model", label: "Model" },
+      { href: "/methodology", label: "Methodology" },
+      { href: "/about", label: "About" }
+    ],
+    social: {
+      github: "https://github.com/your-username",
+      x: "https://x.com/your-handle"
+    }
+  };
