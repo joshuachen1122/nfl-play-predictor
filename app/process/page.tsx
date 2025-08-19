@@ -50,10 +50,9 @@ export default function ProcessPage() {
               key={i}
               index={s.index}
               title={s.title}
-              markdown={s.markdown}
               blocks={s.blocks}
-              defaultOpen={i < 2} // open first couple by default
-            />
+              defaultOpen={i < 2}
+          />
           ))}
         </div>
       )}
