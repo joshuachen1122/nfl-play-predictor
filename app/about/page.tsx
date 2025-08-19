@@ -11,7 +11,7 @@ type Manifest = {
   images: string[];
 };
 
-const TRY_VERSIONS = ["2.0", "1.0"]; // checks in this order
+const TRY_VERSIONS = ["2.0", "1.0"]; // check newest first
 
 async function loadFirstAvailable(): Promise<Manifest | null> {
   for (const v of TRY_VERSIONS) {
@@ -19,7 +19,7 @@ async function loadFirstAvailable(): Promise<Manifest | null> {
       const res = await fetch(`/data/model-${v}.json`, { cache: "no-store" });
       if (res.ok) return (await res.json()) as Manifest;
     } catch {
-      // ignore
+      // ignore and try next
     }
   }
   return null;
@@ -33,147 +33,183 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <article className="prose max-w-none">
-      <h1>About this project</h1>
-      <p>
-        <strong>{site.name}</strong> is a public, static showcase for a model that predicts whether
-        an NFL offense will <em>rush</em> or <em>pass</em> before the snap. The site documents the
-        end-to-end workflow (data → features → training → evaluation) and is designed to grow into a
-        full app (API, DB, auth) without a redesign.
-      </p>
+    <article className="mx-auto max-w-5xl px-4 py-10">
+      {/* Header */}
+      <header className="mb-8">
+        <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs text-gray-600">
+          <span>About</span>
+          <span className="h-1 w-1 rounded-full bg-gray-300" />
+          <span>Rush vs Pass Predictor</span>
+        </div>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          What this project is & how it’s built
+        </h1>
+        <p className="mt-3 max-w-3xl text-gray-600">
+          <strong>{site.name}</strong> is a concise, public showcase of a model that predicts
+          whether an NFL offense will <em>rush</em> or <em>pass</em> before the snap. Version{" "}
+          <strong>2.0</strong> is complete and live; it expands context beyond a single play with
+          smarter priors and short-term momentum, trained via group-aware validation and tuned with
+          random search.
+        </p>
+      </header>
 
-      {/* PROJECT STATUS */}
-      <div className="not-prose mt-4 rounded-2xl border bg-white p-4">
-        <div className="flex items-center justify-between">
+      {/* Status */}
+      <section className="mb-10 rounded-2xl border border-gray-200 bg-white p-5">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <div className="text-sm text-gray-600">Project status</div>
-            <div className="text-lg font-semibold">
-              Latest snapshot:{" "}
-              {snap ? <span>v{snap.model_version}</span> : <span className="text-gray-500">—</span>}
+            <div className="text-sm text-gray-600">Latest snapshot</div>
+            <div className="text-xl font-semibold text-gray-900">
+              v{snap?.model_version ?? "—"}
             </div>
           </div>
           <div className="flex gap-2">
-            <Link href="/model" className="rounded-xl border px-3 py-1.5 text-sm hover:bg-gray-50">
-              Model
+            <Link
+              href="/model"
+              className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+            >
+              See the Model
             </Link>
-            <Link href="/process" className="rounded-xl border px-3 py-1.5 text-sm hover:bg-gray-50">
-              Process
+            <Link
+              href="/process"
+              className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+            >
+              Methodology
             </Link>
             <Link
               href="/model/compare"
-              className="hidden rounded-xl border px-3 py-1.5 text-sm hover:bg-gray-50 sm:block"
+              className="hidden rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 sm:block"
             >
-              Compare
+              Compare Versions
             </Link>
           </div>
         </div>
-        {snap && (
-          <div className="mt-2 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border p-3">
+
+        {snap ? (
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-gray-200 p-3">
               <div className="text-xs uppercase tracking-wide text-gray-500">ROC-AUC</div>
-              <div className="text-xl font-semibold">{snap.metrics?.auc ?? "—"}</div>
+              <div className="text-xl font-semibold text-gray-900">
+                {snap.metrics?.auc ?? "—"}
+              </div>
             </div>
-            <div className="rounded-xl border p-3">
+            <div className="rounded-xl border border-gray-200 p-3">
               <div className="text-xs uppercase tracking-wide text-gray-500">Log Loss</div>
-              <div className="text-xl font-semibold">{snap.metrics?.logloss ?? "—"}</div>
+              <div className="text-xl font-semibold text-gray-900">
+                {snap.metrics?.logloss ?? "—"}
+              </div>
             </div>
-            <div className="rounded-xl border p-3">
+            <div className="rounded-xl border border-gray-200 p-3">
               <div className="text-xs uppercase tracking-wide text-gray-500">Figures</div>
-              <div className="text-xl font-semibold">{snap.images?.length ?? 0}</div>
+              <div className="text-xl font-semibold text-gray-900">{snap.images?.length ?? 0}</div>
             </div>
           </div>
-        )}
-        {!snap && (
-          <p className="mt-2 text-sm text-gray-600">
-            Export a notebook using the provided script to populate metrics and figures (see
-            <code> tools/export_site_assets.py</code>).
+        ) : (
+          <p className="mt-3 text-sm text-gray-600">
+            Export a notebook with the provided script to populate metrics and figures (see{" "}
+            <code>tools/export_site_assets.py</code>).
           </p>
         )}
-      </div>
+      </section>
 
-      <h2>Goals</h2>
-      <ul>
-        <li>
-          <strong>Transparency:</strong> show the code and reasoning, not only final charts.
-        </li>
-        <li>
-          <strong>Reproducibility:</strong> generate all public artifacts directly from executed
-          notebooks (versioned manifests + images).
-        </li>
-        <li>
-          <strong>Extensibility:</strong> start static today, grow to an API-backed app (Option B)
-          with no UI refactor.
-        </li>
-      </ul>
+      {/* Why LightGBM & What’s in 2.0 */}
+      <section className="mb-10 grid gap-6 md:grid-cols-2">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5">
+          <h2 className="text-lg font-semibold text-gray-900">Why LightGBM?</h2>
+          <ul className="mt-3 list-inside list-disc text-gray-700">
+            <li>Excels on tabular data with mixed numeric + categorical features</li>
+            <li>Captures nonlinear interactions without heavy manual crosses</li>
+            <li>Fast training, strong baselines, feature importances out of the box</li>
+          </ul>
+        </div>
 
-      <h2>Tech stack</h2>
-      <ul>
-        <li>
-          <strong>Frontend:</strong> Next.js 14, TypeScript, Tailwind. Code highlighting via{" "}
-          <code>prism-react-renderer</code>; Markdown rendering for notebook text via{" "}
-          <code>react-markdown</code>.
-        </li>
-        <li>
-          <strong>Artifacts:</strong> a small Python exporter executes a notebook and writes{" "}
-          <code>public/data/model-&lt;version&gt;.json</code> plus images under{" "}
-          <code>public/images/&lt;version&gt;/</code>.
-        </li>
-        <li>
-          <strong>(Future)</strong> API: FastAPI (Python), Postgres for logs/feedback, and hosting
-          on Render/Railway/Fly. Frontend on Vercel.
-        </li>
-      </ul>
+        <div className="rounded-2xl border border-gray-200 bg-white p-5">
+          <h2 className="text-lg font-semibold text-gray-900">What’s new in v2.0</h2>
+          <ul className="mt-3 list-inside list-disc text-gray-700">
+            <li>Coach <strong>down</strong> & <strong>distance</strong> priors with Bayesian smoothing</li>
+            <li>Short-term pass-rate windows (last 3–10 plays) at team/drive level</li>
+            <li>Historical tendencies for both offense and defense</li>
+            <li>“Next-snap” game-state context (clock, field position, timeouts)</li>
+            <li>GroupKFold by <em>game_id</em> to prevent leakage; post-hoc calibration</li>
+          </ul>
+        </div>
+      </section>
 
-      <h2>Data & ethics</h2>
-      <ul>
-        <li>
-          Uses publicly available play-by-play data (e.g., packages like <code>nfl_data_py</code>).
-        </li>
-        <li>
-          Focus is on pre-snap context only; no individual player tracking or private data.
-        </li>
-        <li>
-          Educational and research purposes; not affiliated with the NFL or any team.
-        </li>
-      </ul>
+      {/* Feature Engineering */}
+      <section className="mb-10 rounded-2xl border border-gray-200 bg-white p-5">
+        <h2 className="text-lg font-semibold text-gray-900">Feature Engineering (highlights)</h2>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <ul className="list-inside list-disc text-gray-700">
+            <li>Coach tendencies by down & distance buckets (smoothed)</li>
+            <li>Rolling pass-rate windows over recent plays (3, 5, 10)</li>
+            <li>Team & defense priors informed by league rates</li>
+          </ul>
+          <ul className="list-inside list-disc text-gray-700">
+            <li>Game state at next snap: down, distance, clock, yardline, timeouts</li>
+            <li>Clean categorical handling (IDs → categories) for LightGBM</li>
+            <li>Drop/guard potential leakage fields and post-play outcomes</li>
+          </ul>
+        </div>
+      </section>
 
-      <h2>Versioning</h2>
-      <p>
-        The site is version-aware. Each release (e.g., <strong>v1.0</strong>,{" "}
-        <strong>v2.0</strong>) gets a manifest and figure set. The Model page includes a version
-        selector and an optional side-by-side compare. The Process page renders a step-by-step
-        timeline of markdown, code, stdout, and images grouped by notebook headings.
-      </p>
+      {/* Training & Tuning */}
+      <section className="mb-10 rounded-2xl border border-gray-200 bg-white p-5">
+        <h2 className="text-lg font-semibold text-gray-900">Training & Tuning</h2>
+        <ul className="mt-3 list-inside list-disc text-gray-700">
+          <li>Grouped CV by <em>game_id</em>, early stopping on a validation fold</li>
+          <li>
+            Random search over{" "}
+            <code>learning_rate, num_leaves, min_child_samples, feature_fraction, bagging_fraction, bagging_freq, lambda_l2</code>
+          </li>
+          <li>Chosen threshold via validation curve; optional post-hoc calibration</li>
+        </ul>
+      </section>
 
-      <h2>Roadmap</h2>
-      <ul>
-        <li>Publish v2.0 with richer features and better calibration.</li>
-        <li>Compare page with green/red deltas and calibration drift.</li>
-        <li>Interactive “Predict” page once the FastAPI backend is live.</li>
-        <li>Slice dashboards (down/distance/field zone; per-team analysis).</li>
-        <li>Optional feedback collection (thumbs up/down) and AB testing.</li>
-      </ul>
+      {/* Tech Stack */}
+      <section className="mb-10 rounded-2xl border border-gray-200 bg-white p-5">
+        <h2 className="text-lg font-semibold text-gray-900">Tech Stack</h2>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div>
+            <div className="text-sm font-medium text-gray-900">Frontend</div>
+            <p className="text-gray-700">
+              Next.js 14, TypeScript, Tailwind CSS. Notebook text via <code>react-markdown</code>.
+            </p>
+          </div>
+          <div>
+            <div className="text-sm font-medium text-gray-900">Modeling</div>
+            <p className="text-gray-700">Python, LightGBM, scikit-learn, pandas, NumPy.</p>
+          </div>
+          <div>
+            <div className="text-sm font-medium text-gray-900">Artifacts</div>
+            <p className="text-gray-700">
+              Exporter writes <code>public/data/model-&lt;version&gt;.json</code> plus images under{" "}
+              <code>public/images/&lt;version&gt;/</code>.
+            </p>
+          </div>
+          <div>
+            <div className="text-sm font-medium text-gray-900">Deploy</div>
+            <p className="text-gray-700">Static site on Vercel; future API on FastAPI + Postgres.</p>
+          </div>
+        </div>
+      </section>
 
-      <h2>Acknowledgments</h2>
-      <ul>
-        <li>Open-source contributors behind play-by-play data tools.</li>
-        <li>Libraries: LightGBM, scikit-learn, pandas, NumPy, and the broader Python/JS ecosystem.</li>
-      </ul>
+      {/* Roadmap */}
+      <section className="mb-4 rounded-2xl border border-gray-200 bg-white p-5">
+        <h2 className="text-lg font-semibold text-gray-900">What’s next</h2>
+        <ul className="mt-3 list-inside list-disc text-gray-700">
+          <li>Public API endpoint for live predictions + a simple “Try It” page</li>
+          <li>Slice dashboards (down/distance/field zone; per-team coach tendences)</li>
+          <li>Continuous calibration checks and drift monitoring</li>
+        </ul>
+      </section>
 
-      <h2>Contact</h2>
-      <p>
-        Questions or suggestions? Open an issue on{" "}
+      {/* Footer links */}
+      <footer className="mt-8 text-sm text-gray-600">
+        Questions or suggestions? Find the links in the footer or open an issue on{" "}
         <a href={site.social.github} className="underline">
           GitHub
-        </a>{" "}
-        or reach out via the links in the footer.
-      </p>
-
-      <h2>Disclaimer</h2>
-      <p>
-        This site is for educational purposes only and is not affiliated with or endorsed by the NFL
-        or any team. All trademarks are property of their respective owners.
-      </p>
+        </a>
+        .
+      </footer>
     </article>
   );
 }

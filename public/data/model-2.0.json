@@ -7,16 +7,16 @@
     "brier": "0.1915"
   },
   "images": [
-    "/images/2.0/cell_20_img_01.png",
-    "/images/2.0/cell_21_img_02.png",
-    "/images/2.0/cell_22_img_03.png",
-    "/images/2.0/cell_23_img_04.png",
-    "/images/2.0/cell_23_img_05.png",
-    "/images/2.0/cell_24_img_06.png",
-    "/images/2.0/cell_24_img_07.png",
-    "/images/2.0/cell_25_img_08.png",
-    "/images/2.0/cell_26_img_09.png",
-    "/images/2.0/cell_27_img_10.png"
+    "/images/2.0/cell_17_img_01.png",
+    "/images/2.0/cell_18_img_02.png",
+    "/images/2.0/cell_19_img_03.png",
+    "/images/2.0/cell_20_img_04.png",
+    "/images/2.0/cell_20_img_05.png",
+    "/images/2.0/cell_21_img_06.png",
+    "/images/2.0/cell_21_img_07.png",
+    "/images/2.0/cell_22_img_08.png",
+    "/images/2.0/cell_23_img_09.png",
+    "/images/2.0/cell_24_img_10.png"
   ],
   "notes": "Auto-generated from executed notebook"
 }

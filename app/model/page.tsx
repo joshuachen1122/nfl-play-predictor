@@ -14,7 +14,7 @@ function MetricRow({ k, v }: { k: string; v: string }) {
 }
 
 export default function ModelPage() {
-  const [version, setVersion] = useState<string>(VERSIONS[0]);
+  const [version, setVersion] = useState<string>(VERSIONS[1]);
   const [data, setData] = useState<ModelManifest | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,11 +82,6 @@ export default function ModelPage() {
           </div>
         </div>
       )}
-
-      {/* Optional compare note */}
-      <p className="text-sm text-gray-500">
-        Tip: Once you export <code>model-2.0.json</code>, you can add a compare page to show 1.0 vs 2.0 side by side.
-      </p>
     </div>
   );
 }

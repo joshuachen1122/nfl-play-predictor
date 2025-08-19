@@ -11,7 +11,6 @@ export const site = {
         { href: "/about", label: "About" }
     ],
     social: {
-      github: "https://github.com/your-username",
-      x: "https://x.com/your-handle"
+      github: "https://github.com/joshuachen1122/nfl-play-predictor"
     }
   };

@@ -8,7 +8,6 @@ export function Footer() {
           <p>© {new Date().getFullYear()} {site.name}</p>
           <div className="flex gap-4">
             <a href={site.social.github} className="hover:underline">GitHub</a>
-            <a href={site.social.x} className="hover:underline">X</a>
           </div>
         </div>
       </div>

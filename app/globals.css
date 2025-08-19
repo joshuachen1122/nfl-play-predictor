@@ -11,3 +11,34 @@ html, body {
 }
 
 .prose p { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+.prose .notebook-html table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;              /* let columns size naturally */
+}
+.prose .notebook-html thead th {
+  font-weight: 600;
+  background: #f9fafb;            /* light gray header */
+  border-bottom: 1px solid #e5e7eb;
+}
+.prose .notebook-html th,
+.prose .notebook-html td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.6rem;
+  vertical-align: top;
+  white-space: nowrap;             /* prevent ultra-wide columns from wrapping */
+}
+.prose .notebook-html tbody tr:nth-child(odd) {
+  background: #fcfcfd;             /* subtle zebra striping */
+}
+
+/* Pandas default wrap often adds tiny fonts; normalize a bit */
+.prose .notebook-html .dataframe {
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+/* If a table is *very* wide, let the container scroll horizontally */
+.prose .notebook-html {
+  -webkit-overflow-scrolling: touch;
+}

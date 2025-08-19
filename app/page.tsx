@@ -154,22 +154,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* VERSIONING NOTE */}
-      <section className="rounded-2xl border p-5 bg-white">
-        <h2 className="text-lg font-semibold">Versioning</h2>
-        <p className="mt-1 text-sm text-gray-700">
-          The site reads <code>public/data/model-&lt;version&gt;.json</code> and images under{" "}
-          <code>public/images/&lt;version&gt;/</code>. Export your notebook with the provided tool
-          to add new versions. When you publish <strong>v2.0</strong>, the homepage will
-          automatically pick it up as the latest snapshot.
-        </p>
-        <div className="mt-2 text-sm">
-          <Link href="/model/compare" className="underline">
-            Compare v1.0 vs v2.0 →
-          </Link>
-        </div>
-      </section>
     </div>
   );
 }
